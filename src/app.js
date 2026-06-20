@@ -21,7 +21,7 @@ const storage = multer.diskStorage({
 
 // const storage = multer.memoryStorage();
 
-const upload = multer({ storage });
+const upload = multer({ storage, limits: {fileSize: 1024 * 1024 * 2 }});
 
 // const savingFile = async (req, res)=>{
 //     const ext = path.extname(req.file.originalname)
@@ -43,20 +43,32 @@ const upload = multer({ storage });
 //   throw ApiResponse.ok(res, "file uploaded");
 // });
 
-authRouter.post(
-  "/upload",
-  upload.fields([{ name: "photos", maxCount: 2},{ name: "avatar", maxCount: 1 }]),
-  (req, res) => {
-    console.log(req.files);
+// authRouter.post(
+//   "/upload",
+//   upload.fields([
+//     { name: "photos", maxCount: 2 },
+//     { name: "avatar", maxCount: 1 },
+//   ]),
+//   (req, res) => {
+//     console.log(req.files);
 
-    throw ApiResponse.ok(res, "file uploaded");
-  },
-);
+//     throw ApiResponse.ok(res, "file uploaded");
+//   },
+// );
 
 // multer methods 👇🏿
 // upload.file
 // upload.array
 // upload.fields
+authRouter.post("/upload", (req, res) => {
+    upload.single("rover")(req, res, (err) => {
+    if (err) {
+      return res.send("file is too large");
+    }
+    res.send("file uploaded successfully");
+    console.log(req.file.size)
+  });
+});
 
 app.use("/auth", authRouter);
 export default app;
