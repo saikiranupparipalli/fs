@@ -21,7 +21,18 @@ const storage = multer.diskStorage({
 
 // const storage = multer.memoryStorage();
 
-const upload = multer({ storage, limits: {fileSize: 1024 * 1024 * 2 }});
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const allowed = ["application/pdf", "image/jpeg"];
+    if (allowed.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      return cb(new Error("file is not supported"), false);
+    }
+  },
+  limits: { fileSize: 1024 * 1024 * 2 },
+});
 
 // const savingFile = async (req, res)=>{
 //     const ext = path.extname(req.file.originalname)
@@ -60,20 +71,25 @@ const upload = multer({ storage, limits: {fileSize: 1024 * 1024 * 2 }});
 // upload.file
 // upload.array
 // upload.fields
+
 authRouter.post("/upload", (req, res) => {
-    upload.single("rover")(req, res, (err) => {
+  upload.single("rover")(req, res, (err) => {
     if (err) {
-      return res.send("file is too large");
+      if (err.message === "file is not supported") {
+        return res.send("file is not supported");
+      }else if (err.code === "LIMIT_FILE_SIZE") {
+      return res.send("file size it too large");
     }
+    } 
     res.send("file uploaded successfully");
-    console.log(req.file.size)
+ 
   });
 });
 
 app.use("/auth", authRouter);
 export default app;
 
-// O/P OF STORING INSIDE MEMORY
+// O/P OF STORING INSIDE MEMORY 
 // {
 //   fieldname: 'file',
 //   originalname: 'Screenshot (477).png',
