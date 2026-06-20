@@ -8,18 +8,18 @@ import fs from "fs";
 const app = express();
 app.use(express.json());
 
-// const storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "public/uploads");
-//   },
-//   filename: function (req, file, cb) {
-//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-//     const ext = path.extname(file.originalname);
-//     cb(null, file.fieldname + "-" + uniqueSuffix + ext);
-//   },
-// });
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, "public/uploads");
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+    const ext = path.extname(file.originalname);
+    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+  },
+});
 
-const storage = multer.memoryStorage();
+// const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
@@ -27,21 +27,40 @@ const upload = multer({ storage });
 //     const ext = path.extname(req.file.originalname)
 //     const unqName = Date.now()+ "-" + Math.random(Math.random()  * 1e9) + ext
 //     const filePath = path.join("uploads", unqName)
-// }
-authRouter.post("/upload", upload.single("file"), (req, res) => {
-  console.log(req.file.buffer);
-  const ext = path.extname(req.file.originalname);
-  const unqName = Date.now() + "-" + Math.random(Math.random() * 1e9) + ext;
-  const filePath = path.join("public/uploads", unqName);
-  fs.writeFile(filePath, req.file.buffer, (error) => {
-    console.log(error);
-  });
-  res.json({ file: unqName });
-  throw ApiResponse.ok(res, "file uploaded");
-});
+// } -----------------------WONT'T WORK-----------------------------------
+
+// authRouter.post("/upload", upload.single("file"), (req, res) => {
+//   console.log(req.file.buffer);
+
+//   const ext = path.extname(req.file.originalname);
+//   const unqName = Date.now() + "-" + Math.random(Math.random() * 1e9) + ext;
+//   const filePath = path.join("public/uploads", unqName);
+//   fs.writeFile(filePath, req.file.buffer, (error) => {
+//     console.log(error);
+//   });
+//   res.json({ file: unqName });
+
+//   throw ApiResponse.ok(res, "file uploaded");
+// });
+
+authRouter.post(
+  "/upload",
+  upload.fields([{ name: "photos", maxCount: 2},{ name: "avatar", maxCount: 1 }]),
+  (req, res) => {
+    console.log(req.files);
+
+    throw ApiResponse.ok(res, "file uploaded");
+  },
+);
+
+// multer methods 👇🏿
+// upload.file
+// upload.array
+// upload.fields
 
 app.use("/auth", authRouter);
 export default app;
+
 // O/P OF STORING INSIDE MEMORY
 // {
 //   fieldname: 'file',
