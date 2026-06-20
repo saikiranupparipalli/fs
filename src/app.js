@@ -3,26 +3,40 @@ import authRouter from "./modules/auth/routes.js";
 import multer from "multer";
 import ApiResponse from "./common/utils/api-response.js";
 import path from "path";
+import fs from "fs";
 
 const app = express();
 app.use(express.json());
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
-  },
-});
+// const storage = multer.diskStorage({
+//   destination: function (req, file, cb) {
+//     cb(null, "public/uploads");
+//   },
+//   filename: function (req, file, cb) {
+//     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+//     const ext = path.extname(file.originalname);
+//     cb(null, file.fieldname + "-" + uniqueSuffix + ext);
+//   },
+// });
+
+const storage = multer.memoryStorage();
 
 const upload = multer({ storage });
 
+// const savingFile = async (req, res)=>{
+//     const ext = path.extname(req.file.originalname)
+//     const unqName = Date.now()+ "-" + Math.random(Math.random()  * 1e9) + ext
+//     const filePath = path.join("uploads", unqName)
+// }
 authRouter.post("/upload", upload.single("file"), (req, res) => {
-  console.log(req.file);
-
+  console.log(req.file.buffer);
+  const ext = path.extname(req.file.originalname);
+  const unqName = Date.now() + "-" + Math.random(Math.random() * 1e9) + ext;
+  const filePath = path.join("public/uploads", unqName);
+  fs.writeFile(filePath, req.file.buffer, (error) => {
+    console.log(error);
+  });
+  res.json({ file: unqName });
   throw ApiResponse.ok(res, "file uploaded");
 });
 
