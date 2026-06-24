@@ -7,7 +7,7 @@ const playerSchema = new mongoose.Schema(
       trim: true,
       minlength: 2,
       maxlength: 15,
-      required: [true, "name is required"],
+      required: [true, "player is required"],
     },
 
     role: {

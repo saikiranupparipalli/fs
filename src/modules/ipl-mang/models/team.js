@@ -7,7 +7,7 @@ const teamSchema = new mongoose.Schema(
       trim: true,
       minlength: 2,
       maxlength: 15,
-      required: [true, "name is required"],
+      required: [true, "team is required"],
     },
     ownerid: {
       type: mongoose.Schema.Types.ObjectId,

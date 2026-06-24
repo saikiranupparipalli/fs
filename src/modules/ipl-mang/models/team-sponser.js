@@ -14,4 +14,5 @@ const teamSponserSchema = new mongoose.Schema({
   },
 }, {timestamps:true});
 
+teamSponserSchema.index({teamid: 1, sponserid: 1}, {unique: true})
 export default mongoose.model("Teamsponser", teamSponserSchema)

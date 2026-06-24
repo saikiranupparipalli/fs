@@ -4,11 +4,12 @@ import multer from "multer";
 import ApiResponse from "./common/utils/api-response.js";
 import path from "path";
 import fs from "fs";
+import ownerRoutes from "./modules/ipl-mang/routes/owner.route.js"
 
 const app = express();
 app.use(express.json());
  
-
+app.use("/owners", ownerRoutes)
 
 
 // ---------------------------WON'T WORK 👇🏿👇🏿----------------------------
