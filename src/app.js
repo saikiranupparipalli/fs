@@ -7,33 +7,11 @@ import fs from "fs";
 
 const app = express();
 app.use(express.json());
+ 
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "public/uploads");
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-    const ext = path.extname(file.originalname);
-    cb(null, file.fieldname + "-" + uniqueSuffix + ext);
-  },
-});
 
-// const storage = multer.memoryStorage();
 
-const upload = multer({
-  storage,
-  fileFilter: (req, file, cb) => {
-    const allowed = ["application/pdf", "image/jpeg"];
-    if (allowed.includes(file.mimetype)) {
-      cb(null, true);
-    } else {
-      return cb(new Error("file is not supported"), false);
-    }
-  },
-  limits: { fileSize: 1024 * 1024 * 2 },
-});
-
+// ---------------------------WON'T WORK 👇🏿👇🏿----------------------------
 // const savingFile = async (req, res)=>{
 //     const ext = path.extname(req.file.originalname)
 //     const unqName = Date.now()+ "-" + Math.random(Math.random()  * 1e9) + ext
@@ -72,19 +50,19 @@ const upload = multer({
 // upload.array
 // upload.fields
 
-authRouter.post("/upload", (req, res) => {
-  upload.single("rover")(req, res, (err) => {
-    if (err) {
-      if (err.message === "file is not supported") {
-        return res.send("file is not supported");
-      }else if (err.code === "LIMIT_FILE_SIZE") {
-      return res.send("file size it too large");
-    }
-    } 
-    res.send("file uploaded successfully");
+// authRouter.post("/upload", (req, res) => {
+//   upload.single("rover")(req, res, (err) => {
+//     if (err) {
+//       if (err.message === "file is not supported") {
+//         return res.send("file is not supported");
+//       }else if (err.code === "LIMIT_FILE_SIZE") {
+//       return res.send("file size it too large");
+//     }
+//     } 
+//     res.send("file uploaded successfully");
  
-  });
-});
+//   });
+// });
 
 app.use("/auth", authRouter);
 export default app;
