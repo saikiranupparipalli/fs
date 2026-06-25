@@ -7,7 +7,7 @@ const owner = async (req, res) => {
 };
 
 const getOwner = async (req, res) => {
-  const owner = await ownerService.getOwner();
+  const owner = await ownerService.getOwner(req.body);
   throw ApiResponse.ok(res, "got all owners", owner);
 };
 
@@ -23,7 +23,7 @@ const putOwner = async (req, res) => {
 
 const deleteOwner = async (req, res) => {
   const deletedOwner = await ownerService.deleteOwner(req.params.id);
-  throw ApiResponse.ok(res, "updated owner", deleteOwner);
+  throw ApiResponse.ok(res, "deleted owner", deleteOwner);
 };
 
 export { owner, getOwner, getOwnerById, putOwner, deleteOwner };
