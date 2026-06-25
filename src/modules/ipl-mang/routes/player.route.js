@@ -13,4 +13,9 @@ router.put("/:id", controller.putPlayerById);
 
 router.delete("/:id", controller.deletePlayer);
 
+router.post("/stats", controller.postPlayerStats)
+// router.get("/stats/:id", controller.getPlayerStatsByWickets)
+router.put("/stats/:id", controller.putplayerStats)
+ 
+
 export default router;

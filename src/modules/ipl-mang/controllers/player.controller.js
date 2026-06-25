@@ -17,11 +17,34 @@ const getPlayerById = async (req, res) => {
 
 const putPlayerById = async (req, res) => {
   const player = await playerService.updatePlayer(req.params.id, req.body);
-  throw ApiResponse.ok(res, "updated player", player)
+  throw ApiResponse.ok(res, "updated player", player);
 };
 const deletePlayer = async (req, res) => {
-    const player = await playerService.deletePlayerById(req.params.id)
-    throw ApiResponse.ok(res, "deleted player", player)
+  const player = await playerService.deletePlayerById(req.params.id);
+  throw ApiResponse.ok(res, "deleted player", player);
 };
 
-export { postPlayer, getAllPlayer, getPlayerById, putPlayerById, deletePlayer };
+const postPlayerStats = async (req, res) => {
+  const player = await playerService.postPlayerStats(req.body);
+  throw ApiResponse.created(res, "stats created successfully", player);
+};
+// const getPlayerStatsByWickets = async (req, res) => {};
+// const getPlayerRuns = async (req, res) => {};
+
+const putplayerStats = async (req, res) => {
+  const player = await playerService.updatePlayerStats(req.params.id, req.body);
+  throw ApiResponse.created(
+    res,
+    "player (runs) stat has updated successfully",
+    player,
+  );
+};
+export {
+  postPlayer,
+  getAllPlayer,
+  getPlayerById,
+  putPlayerById,
+  deletePlayer,
+  postPlayerStats,
+  putplayerStats,
+};

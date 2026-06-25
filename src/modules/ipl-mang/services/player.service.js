@@ -1,9 +1,10 @@
 import Player from "../models/player.js";
 import Team from "../models/team.js";
 import ApiError from "../../../common/utils/api-error.js";
+import Stats from "../models/player.stats.js";
 
 const createPlayer = async ({ name, role, teamid }) => {
-  const player = await Player.create({ name, role, teamid});
+  const player = await Player.create({ name, role, teamid });
   return player;
 };
 
@@ -56,6 +57,21 @@ const updatePlayerRole = async (playerid, newRole) => {
 
   return player;
 };
+
+const postPlayerStats = async ({ name, wickets, runs, playerid }) => {
+  const player = await Stats.create({ name, wickets, runs, playerid });
+  return player;
+};
+const updatePlayerStats = async (id, { runs }) => {
+  const player = await Stats.findByIdAndUpdate(
+    id,
+    { runs },
+    { new: true, runValidators: true },
+  );
+  if (!player) throw ApiError.notfound("player not found");
+
+  return player;
+};
 export {
   createPlayer,
   getAllPlayer,
@@ -64,4 +80,6 @@ export {
   deletePlayerById,
   transferPlayer,
   updatePlayerRole,
+  postPlayerStats,
+  updatePlayerStats
 };
