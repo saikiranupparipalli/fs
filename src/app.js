@@ -5,13 +5,14 @@ import ApiResponse from "./common/utils/api-response.js";
 import path from "path";
 import fs from "fs";
 import ownerRoutes from "./modules/ipl-mang/routes/owner.route.js"
-
+import playerRoutes from "./modules/ipl-mang/routes/player.route.js"
+import teamRoutes from "./modules/ipl-mang/routes/team.route.js"
 const app = express();
 app.use(express.json());
  
 app.use("/owners", ownerRoutes)
-
-
+app.use("/players", playerRoutes)
+app.use("/teams", teamRoutes)
 // ---------------------------WON'T WORK 👇🏿👇🏿----------------------------
 // const savingFile = async (req, res)=>{
 //     const ext = path.extname(req.file.originalname)
