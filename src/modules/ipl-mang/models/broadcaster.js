@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const broadcasterSchema = new mongoose.Schema(
-    {
+  {
     name: {
       type: String,
       trim: true,
@@ -9,8 +9,8 @@ const broadcasterSchema = new mongoose.Schema(
       maxlength: 15,
       required: [true, "broadcaster is required"],
     },
+  },
+  { timestamps: true },
+);
 
-    }, {timestamps:true}
-)
-
-export default mongoose.model("broadcaster", broadcasterSchema)
+export default mongoose.model("Broadcaster", broadcasterSchema);
